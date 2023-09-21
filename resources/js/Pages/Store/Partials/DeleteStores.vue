@@ -14,6 +14,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['close'])
+
 const storeIds = computed(() => {
   return props.stores.map(s => s.id)
 })
@@ -30,13 +32,14 @@ const confirmStoresDeletion = () => {
   confirmingStoresDeletion.value = true;
   nextTick(() => {
     form.password = ''
-    form.stores = [...storeIds.value, 898]
+    form.stores = storeIds.value
     passwordInput.value.focus()
   });
 };
 
 const closeModal = () => {
   confirmingStoresDeletion.value = false;
+  emit('close')
 };
 
 const deleteStores = () => {

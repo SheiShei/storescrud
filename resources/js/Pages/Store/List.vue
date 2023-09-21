@@ -30,6 +30,19 @@ const toggleSelectStore = (store) => {
   }
 };
 
+const trimString = (string) => {
+    if (string.length <= 255) {
+        return string; // No need to trim, return the original string
+    } else {
+        return string.slice(0, 100) + "..."; // Trim the string to 97 characters and add ellipsis
+    }
+}
+
+const clearDeleteData = () => {
+    selectedStores.value = []
+    selectAll.value = false;
+}
+
 </script>
 
 <template>
@@ -49,7 +62,7 @@ const toggleSelectStore = (store) => {
 
         <div class="p-6 bg-white overflow-hidden sm:rounded-lg">
           <div class="flex items-center justify-end">
-            <DeleteStores v-if="selectedStores.length" :stores="selectedStores"/>
+            <DeleteStores @close="clearDeleteData" v-if="selectedStores.length" :stores="selectedStores"/>
             <Link
                 class="ml-4 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150-4"
                 :href="route('store.create')"
@@ -58,7 +71,7 @@ const toggleSelectStore = (store) => {
             </Link>
           </div>
           <div class="relative overflow-x-auto sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <table v-if="stores.data.length" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead
                   class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -111,7 +124,7 @@ const toggleSelectStore = (store) => {
                   {{ store.name }}
                 </th>
                 <td class="px-6 py-4">
-                  {{ store.description }}
+                  {{ trimString(store.description) }}
                 </td>
                 <td class="px-6 py-4 text-right">
                   <Link
@@ -130,6 +143,8 @@ const toggleSelectStore = (store) => {
               </tr>
               </tbody>
             </table>
+
+            <p class="text-center" v-else>No Stores Created Yet</p>
 
             <Pagination class="mt-6" :links="stores.links"/>
           </div>
