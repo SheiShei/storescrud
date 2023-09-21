@@ -11,6 +11,10 @@ class Store extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $hidden = ['deleted_at'];
+
+    protected $fillable = ['name', 'description'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
