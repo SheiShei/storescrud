@@ -30,12 +30,13 @@ const passwordInput = ref(null);
 
 const confirmStoresDeletion = () => {
   confirmingStoresDeletion.value = true;
-  nextTick(() => {
-    form.password = ''
-    form.stores = storeIds.value
-    passwordInput.value.focus()
-  });
+  nextTick(resetValues);
 };
+
+const resetValues = () => {
+    form.password = ''
+    passwordInput.value.focus()
+}
 
 const closeModal = () => {
   confirmingStoresDeletion.value = false;
@@ -43,10 +44,13 @@ const closeModal = () => {
 };
 
 const deleteStores = () => {
-  form.delete(route('store.bulkDestroy'), {
+  form.transform((data) => ({
+      ...data,
+      stores: storeIds.value,
+  })).delete(route('store.bulkDestroy'), {
     preserveScroll: true,
     onSuccess: () => closeModal(),
-    onError: () => passwordInput.value.focus(),
+    onError: () => resetValues(),
     onFinish: () => form.reset(),
   });
 };
