@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [StoreController::class, 'index'])->name('dashboard');
-    Route::resource('store',StoreController::class)->except(['index']);
+    Route::delete('/store/bulk-destroy', [StoreController::class, 'bulkDestroy'])->name('store.bulkDestroy');
+    Route::resource('store',StoreController::class)->except(['index', 'destroy']);
 });
 
 Route::middleware('auth')->group(function () {

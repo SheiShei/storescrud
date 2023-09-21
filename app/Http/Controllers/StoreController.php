@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBulkDeleteRequest;
 use App\Http\Requests\StoreSaveRequest;
 use App\Models\Store;
 use Illuminate\Http\Request;
@@ -63,5 +64,11 @@ class StoreController extends Controller
         $store->save();
 
         return redirect()->route('store.show', ['store' => $store])->with('message', 'Store Updated Successfully');
+    }
+
+    public function bulkDestroy(StoreBulkDeleteRequest $request)
+    {
+        Auth::user()->stores()->whereIn('id', $request->validated('stores'))->delete();
+        return redirect()->route('dashboard')->with('message', 'Bulk Delete Success!!');
     }
 }
