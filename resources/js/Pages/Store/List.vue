@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     stores: {
@@ -46,7 +47,7 @@ defineProps({
                             <tbody>
                             <tr
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                v-for="store in stores"
+                                v-for="store in stores.data"
                                 :key="store.id"
                             >
                                 <td class="w-4 p-4">
@@ -63,11 +64,24 @@ defineProps({
                                     {{ store.description }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    <Link
+                                        :href="route('store.show', store)"
+                                        class="mx-6 font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                    >
+                                        View
+                                    </Link>
+                                    <Link
+                                        :href="route('store.edit', store)"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4"
+                                    >
+                                        Edit
+                                    </Link>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+
+                        <Pagination class="mt-6" :links="stores.links" />
                     </div>
                 </div>
             </div>

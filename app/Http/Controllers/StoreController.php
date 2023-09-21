@@ -12,7 +12,7 @@ class StoreController extends Controller
 {
     public function index(): \Inertia\Response
     {
-        $userStores = Auth::user()->stores;
+        $userStores = Auth::user()->stores()->paginate(5);
         return Inertia::render('Store/List', [
             'stores' => $userStores,
         ]);
