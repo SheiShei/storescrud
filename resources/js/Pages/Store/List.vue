@@ -5,7 +5,7 @@ import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     stores: {
-        type: Array,
+        type: Object,
     },
 });
 </script>
