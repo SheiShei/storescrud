@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSaveRequest;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,4 +25,43 @@ class StoreController extends Controller
         ]);
     }
 
+
+    public function create()
+    {
+        return Inertia::render(
+            'Store/Create'
+        );
+    }
+
+    public function store(StoreSaveRequest $request)
+    {
+        $store = Auth::user()->stores()->create([
+            'name' => $request->validated('name'),
+            'description' => $request->validated('description'),
+        ]);
+
+        return redirect()->route('store.show', ['store' => $store])->with('message', 'Store Created Successfully!!');
+    }
+
+    public function edit(Store $store)
+    {
+        return Inertia::render(
+            'Store/Update',
+            [
+                'store' => $store
+            ]
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(StoreSaveRequest $request, Store $store)
+    {
+        $store->name = $request->validated('name');
+        $store->description = $request->validated('description');
+        $store->save();
+
+        return redirect()->route('store.show', ['store' => $store])->with('message', 'Store Updated Successfully');
+    }
 }
